@@ -3,7 +3,8 @@ const db = require("../models/db.js");
 exports.getItems = async (req, res) => {
     try {
         const allItems = await db.find();
-        res.json(allItems);
+        //res.json(allItems);
+        res.send(allItems);
     } catch (error) {
         console.log(error);
     }
