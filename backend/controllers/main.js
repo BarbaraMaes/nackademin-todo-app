@@ -35,8 +35,9 @@ exports.postItem = async (req, res) => {
 
 exports.updateItem = async (req, res) => {
     //update a new todo item
+    console.log(req.body);
     try {
-        const updated = await db.update({ _id: req.params.id }, { $set: { title: req.body.title, description: req.body.description } });
+        const updated = await db.update({ _id: req.body._id }, { $set: { title: req.body.title, description: req.body.description } });
         if (updated === 1) {
             res.json("Updated succesfuly");
         }
@@ -51,7 +52,7 @@ exports.deleteItem = async (req, res) => {
     try {
         const deleted = await db.remove({ _id: req.params.id });
         if (deleted === 1) {
-            res.json("Deleted succesfuly");
+            res.status(200).json({ message: "Deleted succesfuly" });
         }
         else res.json("something went wrong");
     } catch (error) {

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
+import Item from './FeedItem/FeedItem';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup'
-import Accordion from 'react-bootstrap/Accordion';
-import Card from 'react-bootstrap/Card';
+import Modal from './UI/Modal';
+
 
 const Feed = () => {
     const [data, setData] = useState(null);
-
+    const [modalShow, setModalShow] = useState(false);
+    const [feedItem, setFeedItem] = useState(false);
     useEffect(() => {
         fetchItems();
     }, [data])
@@ -25,26 +28,73 @@ const Feed = () => {
             console.log(error);
         }
     }
+
+    const modalHandler = (item) => {
+        if (modalShow === true) {
+            setModalShow(false)
+        }
+        else setModalShow(true)
+        if (item) setFeedItem(item);
+    }
+
+    const deleteHandler = async (id) => {
+        try {
+            const result = await fetch("http://localhost:3000/" + id, {
+                method: "DELETE"
+            });
+            if (result.status !== 200 && result.status !== 201) {
+                console.log("deleting item failed");
+            }
+            fetchItems();
+            return result.json();
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const modalSubmitHandler = async (item) => {
+        modalHandler();
+        console.log(item);
+        try {
+            if (item._id) {
+                //update
+                const result = await fetch("http://localhost:3000/" + item.id, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(item)
+                })
+                if (result.status !== 200 && result.status !== 201) {
+                    console.log("couldn't add item");
+                }
+                fetchItems();
+                return await result.json();
+            }
+            //create
+            else {
+                const result = await fetch("http://localhost:3000/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(item)
+                });
+                if (result.status !== 200 && result.status !== 201) {
+                    console.log("couldn't add item");
+                }
+                fetchItems();
+                return await result.json();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <Container>
-            <h1 className="text-center">Todo Items</h1>
+            <h1 className="text-center mt-4">Todo Items</h1>
             {data != null ? data.map((item) => (
-                <Accordion defaultActiveKey="1" key={item._id}>
-                    <Card className="text-center">
-                        <Card.Header><Accordion.Toggle as={Button} variant="button" eventKey="0">{item.title}</Accordion.Toggle></Card.Header>
-                        <Accordion.Collapse eventKey="0">
-                            <Card.Body>
-                                <Card.Text>{item.description}</Card.Text>
-                                <ButtonGroup size="md" className="d-flex justify-content-around">
-                                    <Button className="mx-2" variant="primary">Update</Button>
-                                    <Button className="mx-2" variant="danger">Delete</Button>
-                                </ButtonGroup>
-                            </Card.Body>
-
-                        </Accordion.Collapse>
-                    </Card>
-                </Accordion>
+                <Row className="justify-content-center" key={item._id}><Col xs={8}><Item item={item} onDelete={deleteHandler.bind(this, item._id)} onModal={modalHandler} /></Col></Row>
             )) : null}
+            <Row className="justify-content-center mt-3"><Col xs={8}><Button variant="info" size="lg" block onClick={modalHandler}>Add Item</Button></Col></Row>
+            <Modal show={modalShow} modalHandler={modalHandler} modalTitle="Add Todo Item" onSubmit={modalSubmitHandler} item={feedItem} />
         </Container>
     )
 }
