@@ -13,7 +13,7 @@ const Feed = () => {
     const [feedItem, setFeedItem] = useState(false);
     useEffect(() => {
         fetchItems();
-    }, [data])
+    }, [])
 
     const fetchItems = async () => {
         try {

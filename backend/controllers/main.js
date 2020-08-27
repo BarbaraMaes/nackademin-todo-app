@@ -1,9 +1,11 @@
-const db = require("../models/db.js");
+const actions = require('../models/databaseFunctions');
 
 exports.getItems = async (req, res) => {
     try {
-        const allItems = await db.find();
-        //res.json(allItems);
+        const allItems = await actions.getItems()
+        if (!allItems) {
+            res.send("Nothing to do");
+        }
         res.send(allItems);
     } catch (error) {
         console.log(error);
@@ -13,7 +15,7 @@ exports.getItems = async (req, res) => {
 exports.getItem = async (req, res) => {
     //get specific item from params id
     try {
-        const item = await db.findOne({ _id: req.params.id });
+        const item = await actions.getItem(req.params.id);
         if (item !== null) {
             res.json(item);
         }
@@ -26,7 +28,7 @@ exports.getItem = async (req, res) => {
 exports.postItem = async (req, res) => {
     //post a new todo item
     try {
-        const item = await db.insert({ title: req.body.title, description: req.body.description, done: false });
+        const item = await actions.postItem(req.body.title, req.body.description);
         res.json(item);
     } catch (error) {
         console.log(error);
@@ -37,7 +39,7 @@ exports.updateItem = async (req, res) => {
     //update a new todo item
     console.log(req.body);
     try {
-        const updated = await db.update({ _id: req.body._id }, { $set: { title: req.body.title, description: req.body.description } });
+        const updated = await actions.updateItem(req.body._id, req.body.title, req.body.description);
         if (updated === 1) {
             res.json("Updated succesfuly");
         }
@@ -50,7 +52,7 @@ exports.updateItem = async (req, res) => {
 exports.deleteItem = async (req, res) => {
     //delete a todo item 
     try {
-        const deleted = await db.remove({ _id: req.params.id });
+        const deleted = await actions.deleteItem(req.params.id)
         if (deleted === 1) {
             res.status(200).json({ message: "Deleted succesfuly" });
         }

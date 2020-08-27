@@ -25,7 +25,7 @@ const ModalForm = (props) => {
     }
 
     return (
-        <Modal show={props.show} onHide={props.modalHandler} size="sm">
+        <Modal show={props.show} onHide={props.modalHandler} size="md">
             <Modal.Header closeButton>
                 <Modal.Title>{props.modalTitle}</Modal.Title>
             </Modal.Header>
@@ -37,7 +37,7 @@ const ModalForm = (props) => {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Description</Form.Label>
-                        <Form.Control type="text" placeholder="Enter a description" defaultValue={props.item ? props.item.description : ''} name="description" />
+                        <Form.Control as="textarea" placeholder="Enter a description" defaultValue={props.item ? props.item.description : ''} name="description" />
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
