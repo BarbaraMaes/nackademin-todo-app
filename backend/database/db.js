@@ -1,5 +1,6 @@
 const Datastore = require("nedb-promises");
 
-db = new Datastore({ filename: __dirname + '/../database/data', autoload: true });
+exports.TodoDB = new Datastore({ filename: __dirname + '/../database/Todo', autoload: true });
+exports.AuthDB = new Datastore({ filename: __dirname + '/../database/Auth', autoload: true });
 
-module.exports = db;
+//module.exports = db;

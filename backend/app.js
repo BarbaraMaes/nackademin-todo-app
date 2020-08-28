@@ -1,22 +1,18 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const routes = require("./routes/routes");
+const cors = require("cors");
+const todoRoutes = require("./routes/todo");
+const userRoutes = require("./routes/user");
 
+require("dotenv").config()
+
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-        "Access-Control-Allow-Methods",
-        "OPTIONS, GET, POST, PUT, PATCH, DELETE"
-    );
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    next();
-});
-
-app.use(routes);
+app.use(todoRoutes);
+app.use('/user', userRoutes);
 
 app.listen(3000, () => {
     console.log("server started on port 3000")

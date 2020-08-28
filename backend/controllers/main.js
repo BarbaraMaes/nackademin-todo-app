@@ -1,4 +1,4 @@
-const actions = require('../models/databaseFunctions');
+const actions = require('../models/CRUD-Todo');
 
 exports.getItems = async (req, res) => {
     try {
@@ -37,9 +37,8 @@ exports.postItem = async (req, res) => {
 
 exports.updateItem = async (req, res) => {
     //update a new todo item
-    console.log(req.body);
     try {
-        const updated = await actions.updateItem(req.body._id, req.body.title, req.body.description);
+        const updated = await actions.updateItem(req.body._id, req.body.title, req.body.description, req.body.done);
         if (updated === 1) {
             res.json("Updated succesfuly");
         }

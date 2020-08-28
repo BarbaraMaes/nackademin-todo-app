@@ -5,12 +5,14 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from './UI/Modal';
+const sessionstorage = require("sessionstorage");
 
 
-const Feed = () => {
+const Feed = (props) => {
     const [data, setData] = useState(null);
     const [modalShow, setModalShow] = useState(false);
     const [feedItem, setFeedItem] = useState(false);
+    const [user, setUser] = useState(sessionstorage.getItem("user"));
     useEffect(() => {
         fetchItems();
     }, [])
@@ -87,13 +89,33 @@ const Feed = () => {
         }
     }
 
+    const checkedHandler = async (item) => {
+        try {
+            //update
+            let doneToggle = item.done ? false : true;
+            const result = await fetch("http://localhost:3000/" + item.id, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ ...item, done: doneToggle })
+            })
+            if (result.status !== 200 && result.status !== 201) {
+                console.log("couldn't add item");
+            }
+            fetchItems();
+            return await result.json();
+        } catch (error) {
+
+        }
+    }
+
     return (
         <Container>
-            <h1 className="text-center mt-4">Todo Items</h1>
+            <h1 className="text-center mt-4">Hi {user}, these are your Todo Items</h1>
             {data != null ? data.map((item) => (
-                <Row className="justify-content-center" key={item._id}><Col xs={8}><Item item={item} onDelete={deleteHandler.bind(this, item._id)} onModal={modalHandler} /></Col></Row>
+                <Row className="justify-content-center" key={item._id}><Col xs={8}><Item item={item} checkedHandler={checkedHandler} onDelete={deleteHandler.bind(this, item._id)} onModal={modalHandler} /></Col></Row>
             )) : null}
             <Row className="justify-content-center mt-3"><Col xs={8}><Button variant="info" size="lg" block onClick={modalHandler}>Add Item</Button></Col></Row>
+            <Row className="justify-content-center mt-3"><Col xs={8}><Button variant="danger" size="lg" block onClick={props.onLogout}>Logout</Button></Col></Row>
             <Modal show={modalShow} modalHandler={modalHandler} modalTitle="Add Todo Item" onSubmit={modalSubmitHandler} item={feedItem} />
         </Container>
     )
