@@ -2,7 +2,13 @@ const actions = require('../models/CRUD-Todo');
 
 exports.getItems = async (req, res) => {
     try {
-        const allItems = await actions.getItems()
+        let allItems;
+        if (req.role === "ADMIN") {
+            allItems = await actions.getItems()
+        }
+        else {
+            allItems = await actions.getItems(req.userId)
+        }
         if (!allItems) {
             res.send("Nothing to do");
         }
@@ -28,7 +34,7 @@ exports.getItem = async (req, res) => {
 exports.postItem = async (req, res) => {
     //post a new todo item
     try {
-        const item = await actions.postItem(req.body.title, req.body.description);
+        const item = await actions.postItem(req.body.title, req.body.description, req.userId);
         res.json(item);
     } catch (error) {
         console.log(error);
@@ -50,6 +56,9 @@ exports.updateItem = async (req, res) => {
 
 exports.deleteItem = async (req, res) => {
     //delete a todo item 
+    if (res.status(403)) {
+        return res.json({ message: "This action is not allowed" });
+    }
     try {
         const deleted = await actions.deleteItem(req.params.id)
         if (deleted === 1) {

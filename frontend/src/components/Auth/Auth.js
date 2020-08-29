@@ -10,8 +10,6 @@ import Alert from 'react-bootstrap/Alert';
 const Auth = (props) => {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
-    const [resultMessage, setResultMessage] = useState(null);
-    const [showAlert, setShowAlert] = useState(false);
 
     const emailChange = e => {
         setEmail(e.target.value);

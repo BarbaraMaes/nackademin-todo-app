@@ -1,7 +1,13 @@
 const { TodoDB } = require("../database/db.js");
 
-exports.getItems = async () => {
-    const docs = await TodoDB.find();
+exports.getItems = async (userId = null) => {
+    let docs;
+    if (userId) {
+        docs = await TodoDB.find({ user: userId });
+    }
+    else {
+        docs = await TodoDB.find();
+    }
     return docs;
 }
 
@@ -10,8 +16,8 @@ exports.getItem = async (id) => {
     return doc;
 }
 
-exports.postItem = async (title, description) => {
-    const doc = await TodoDB.insert({ title: title, description: description, done: false });
+exports.postItem = async (title, description, user) => {
+    const doc = await TodoDB.insert({ title: title, description: description, done: false, user: user });
     return doc;
 }
 

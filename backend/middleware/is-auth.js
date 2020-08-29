@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+exports.isAuth = (req, res, next) => {
     const header = req.get("Authorization");
     if (!header) {
+        console.log("there's no header");
         //throw error
     }
     const token = header.split(" ")[1];
@@ -16,5 +17,18 @@ module.exports = (req, res, next) => {
         //not authenticated
     }
     req.userId = decodeToken.userId;
+    req.role = decodeToken.role
     next()
+}
+
+exports.checkRole = (role) => {
+    return (req, res, next) => {
+        const userRole = req.role;
+        console.log(userRole);
+        if (userRole !== role) {
+            console.log("not allowed");
+            res.status(403).send("This action is not allowed");
+        }
+        next();
+    }
 }

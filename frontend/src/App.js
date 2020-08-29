@@ -4,21 +4,19 @@ import Feed from './components/Feed';
 import Auth from './components/Auth/Auth';
 import './App.css';
 
-const sessionstorage = require("sessionstorage");
-
 function App() {
   const [token, setToken] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     getUser();
   }, [])
 
   const getUser = () => {
-    const token = sessionstorage.getItem("token");
-    const expiryDate = sessionstorage.getItem("expiryDate");
+    const token = localStorage.getItem("token");
+    const expiryDate = localStorage.getItem("expiryDate");
     if (!token || !expiryDate) {
       return;
     }
@@ -26,16 +24,16 @@ function App() {
       logoutHandler();
       return;
     }
-    const userId = sessionstorage.getItem("userId");
+    const userId = localStorage.getItem("userId");
     setIsAuth(true);
   }
 
   const logoutHandler = () => {
     setIsAuth(false);
     setToken(null);
-    sessionstorage.removeItem("token");
-    sessionstorage.removeItem("expiryDate");
-    sessionstorage.removeItem("userId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("expiryDate");
+    localStorage.removeItem("userId");
   }
 
   const signupHandler = async (email, password) => {
@@ -63,6 +61,7 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
       }).then(result => {
+        console.log(result)
         if (result.status !== 200 && result.status !== 201) {
           return result.json()
         }
@@ -71,14 +70,14 @@ function App() {
         setToken(data.token);
         setUserId(data.userId);
         setIsAuth(true);
-        sessionstorage.setItem("token", data.token);
-        sessionstorage.setItem("userId", data.userId);
-        sessionstorage.setItem("user", data.user.email)
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.userId);
+        localStorage.setItem("user", data.user.email)
         const remainingMilliseconds = 60 * 60 * 1000;
         const expiryDate = new Date(
           new Date().getTime() + remainingMilliseconds
         );
-        sessionstorage.setItem("expiryDate", expiryDate.toISOString());
+        localStorage.setItem("expiryDate", expiryDate.toISOString());
       })
 
     } catch (error) {

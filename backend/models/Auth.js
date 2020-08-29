@@ -6,7 +6,7 @@ exports.signup = async (email, password) => {
     //hash password
     try {
         const hash = await bcrypt.hash(password, 12);
-        const user = AuthDB.insert({ email, hash });
+        const user = AuthDB.insert({ email, hash, role: "USER" });
         return user;
     } catch (error) {
         console.log(error);
@@ -27,7 +27,8 @@ exports.login = async (email, password) => {
         }
         const token = jwt.sign({
             email: user.email,
-            userId: user._id.toString()
+            userId: user._id.toString(),
+            role: user.role
         }, process.env.SECRET, { expiresIn: "1h" });
         return ({ token: token, userId: user._id.toString(), user: user });
     } catch (error) {
