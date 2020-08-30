@@ -11,10 +11,10 @@ exports.isAuth = (req, res, next) => {
     try {
         decodeToken = jwt.verify(token, process.env.SECRET);
     } catch (error) {
-        //throw error
+        console.log(error);
     }
     if (!decodeToken) {
-        //not authenticated
+        console.log("not authenticated")
     }
     req.userId = decodeToken.userId;
     req.role = decodeToken.role
@@ -26,7 +26,6 @@ exports.checkRole = (role) => {
         const userRole = req.role;
         console.log(userRole);
         if (userRole !== role) {
-            console.log("not allowed");
             res.status(403).send("This action is not allowed");
         }
         next();

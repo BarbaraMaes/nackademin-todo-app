@@ -18,3 +18,10 @@ app.use('/user', userRoutes);
 app.listen(3000, () => {
     console.log("server started on port 3000")
 })
+
+/*
+All newly created users have the role user.
+users :
+{ role: "USER", username: "user", password: "123"}
+{ role: "ADMIN", username: "admin", password: "123"}
+*/

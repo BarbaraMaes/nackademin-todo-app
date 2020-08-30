@@ -1,5 +1,6 @@
 const actions = require('../models/CRUD-Todo');
 
+//check role, ADMIN can see all posts, USER can only see their own
 exports.getItems = async (req, res) => {
     try {
         let allItems;
@@ -10,7 +11,7 @@ exports.getItems = async (req, res) => {
             allItems = await actions.getItems(req.userId)
         }
         if (!allItems) {
-            res.send("Nothing to do");
+            res.send("No to do items");
         }
         res.send(allItems);
     } catch (error) {
@@ -32,7 +33,7 @@ exports.getItem = async (req, res) => {
 }
 
 exports.postItem = async (req, res) => {
-    //post a new todo item
+    //post a new todo item with the logged in userID
     try {
         const item = await actions.postItem(req.body.title, req.body.description, req.userId);
         res.json(item);
@@ -55,7 +56,7 @@ exports.updateItem = async (req, res) => {
 }
 
 exports.deleteItem = async (req, res) => {
-    //delete a todo item 
+    //delete a todo item, Only ADMIN can delete items
     if (res.status(403)) {
         return res.json({ message: "This action is not allowed" });
     }
