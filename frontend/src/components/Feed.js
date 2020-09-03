@@ -5,7 +5,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Modal from './UI/Modal';
-import Spinner from 'react-bootstrap/Spinner'
+import Spinner from 'react-bootstrap/Spinner';
+import Alert from 'react-bootstrap/Alert';
 
 
 const Feed = (props) => {
@@ -15,6 +16,11 @@ const Feed = (props) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState({
+        message: null,
+        variant: null
+    });
+
     useEffect(() => {
         setToken(localStorage.getItem("token"));
         setUser(localStorage.getItem("user"));
@@ -24,7 +30,7 @@ const Feed = (props) => {
     const fetchItems = async () => {
         if (token && user) {
             try {
-                const response = await fetch("http://localhost:3000/", {
+                const response = await fetch("http://localhost:3000/todo", {
                     headers: {
                         "Content-Type": 'application/json',
                         "Authorization": 'Bearer ' + token
@@ -33,7 +39,7 @@ const Feed = (props) => {
                 const JSONdata = await response.json()
                 setData(JSONdata)
             } catch (error) {
-                console.log(error);
+                catchError(error);
             }
             setLoading(false)
         }
@@ -49,7 +55,7 @@ const Feed = (props) => {
 
     const deleteHandler = async (id) => {
         try {
-            const result = await fetch("http://localhost:3000/" + id, {
+            const result = await fetch("http://localhost:3000/todo/" + id, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": 'application/json',
@@ -57,12 +63,19 @@ const Feed = (props) => {
                 }
             });
             if (result.status !== 200 && result.status !== 201) {
-                console.log("deleting item failed");
+                console.log(result);
+                const res = await result.json()
+                //console.log(res);
+                setError({
+                    message: res.message,
+                    variant: "danger"
+                })
+                return res;
             }
             fetchItems();
             return result.json();
         } catch (error) {
-            console.log(error);
+            catchError(error);
         }
     }
 
@@ -71,7 +84,7 @@ const Feed = (props) => {
         try {
             if (item._id) {
                 //update
-                const result = await fetch("http://localhost:3000/" + item.id, {
+                const result = await fetch("http://localhost:3000/todo/" + item.id, {
                     method: "PUT",
                     headers: {
                         "Content-Type": 'application/json',
@@ -80,14 +93,19 @@ const Feed = (props) => {
                     body: JSON.stringify(item)
                 })
                 if (result.status !== 200 && result.status !== 201) {
-                    console.log("couldn't add item");
+                    const res = await result.json()
+                    setError({
+                        message: res.message,
+                        variant: "danger"
+                    })
+                    return res;
                 }
                 fetchItems();
                 return await result.json();
             }
             //create
             else {
-                const result = await fetch("http://localhost:3000/", {
+                const result = await fetch("http://localhost:3000/todo", {
                     method: "POST",
                     headers: {
                         "Content-Type": 'application/json',
@@ -96,13 +114,18 @@ const Feed = (props) => {
                     body: JSON.stringify(item)
                 });
                 if (result.status !== 200 && result.status !== 201) {
-                    console.log("couldn't add item");
+                    const res = await result.json()
+                    setError({
+                        message: res.message,
+                        variant: "danger"
+                    })
+                    return res;
                 }
                 fetchItems();
                 return await result.json();
             }
         } catch (error) {
-            console.log(error);
+            catchError(error);
         }
     }
 
@@ -110,7 +133,7 @@ const Feed = (props) => {
         try {
             //update
             let doneToggle = item.done ? false : true;
-            const result = await fetch("http://localhost:3000/" + item.id, {
+            const result = await fetch("http://localhost:3000/todo/" + item.id, {
                 method: "PUT",
                 headers: {
                     "Content-Type": 'application/json',
@@ -119,14 +142,27 @@ const Feed = (props) => {
                 body: JSON.stringify({ ...item, done: doneToggle })
             })
             if (result.status !== 200 && result.status !== 201) {
-                console.log("couldn't add item");
+                const res = await result.json()
+                setError({
+                    message: res.message,
+                    variant: "danger"
+                })
+                return res;
             }
             fetchItems();
             return await result.json();
         } catch (error) {
-
+            catchError(error);
         }
     }
+
+    const errorHandler = () => {
+        setError(null);
+    };
+
+    const catchError = error => {
+        setError(error);
+    };
     if (loading) {
         return (
             <Container className="text-center m-5">
@@ -138,6 +174,10 @@ const Feed = (props) => {
         return (
             <Container className="justify-content-center">
                 <h1 className="text-center mt-4">Hi {user}, these are your Todo Items</h1>
+                <Row className="justify-content-center">
+                    <Alert variant={error.variant} show={error.message ? true : false}>
+                        {error.message}
+                    </Alert></Row>
                 {
                     data != null ? data.map((item) => (
                         <Row className="justify-content-center" key={item._id}><Col xs={8}><Item item={item} checkedHandler={checkedHandler} onDelete={deleteHandler.bind(this, item._id)} onModal={modalHandler} /></Col></Row>

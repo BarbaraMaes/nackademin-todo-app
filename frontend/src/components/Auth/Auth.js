@@ -24,8 +24,8 @@ const Auth = (props) => {
             <h1 className="text-center mt-4">Login/Register</h1>
             <Row className="justify-content-md-center">
                 <Col xs={6}>
-                    <Alert variant="success" show={props.showAlert}>
-                        {props.message}
+                    <Alert variant={props.error.variant} show={props.showAlert}>
+                        {props.error.message}
                     </Alert>
                     <Form>
                         <Form.Group>

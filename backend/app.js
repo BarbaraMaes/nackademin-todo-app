@@ -12,12 +12,21 @@ app.use(express.json())
 //app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(todoRoutes);
+app.use('/todo', todoRoutes);
 app.use('/user', userRoutes);
 
-app.listen(3000, () => {
-    console.log("server started on port 3000")
-})
+app.use((error, req, res, next) => {
+    console.log(error);
+    const status = error.statusCode || 500;
+    const message = error.message;
+    const data = error.data;
+    res.status(status).json({
+        message: message,
+        data: data
+    });
+});
+
+module.exports = app;
 
 /*
 All newly created users have the role user.

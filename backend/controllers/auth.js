@@ -2,6 +2,9 @@ const actions = require('../models/Auth');
 
 exports.signup = async (req, res) => {
     const user = await actions.signup(req.body.email, req.body.password);
+    if (!user) {
+        res.status(500).json({ message: "user already exists" });
+    }
     res.status(200).json(user);
 }
 

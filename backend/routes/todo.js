@@ -10,7 +10,12 @@ router.get("/", auth.isAuth, controller.getItems);
 router.get("/:id", auth.isAuth, controller.getItem);
 
 //post one todo item 
-router.post("/", auth.isAuth, controller.postItem);
+//router.post("/", auth.isAuth, controller.postItem);
+//post a new list 
+router.post("/", auth.isAuth, controller.postList);
+
+//post item to a list
+router.post("/:id", auth.isAuth, controller.postItem);
 
 //update a todo item with given id
 router.put("/:id", auth.isAuth, controller.updateItem);

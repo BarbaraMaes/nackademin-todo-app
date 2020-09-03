@@ -8,7 +8,11 @@ function App() {
   const [token, setToken] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [message, setMessage] = useState('');
+  //const [message, setMessage] = useState('');
+  const [error, setError] = useState({
+    message: null,
+    variant: null
+  });
 
   useEffect(() => {
     getUser();
@@ -45,9 +49,17 @@ function App() {
         body: JSON.stringify({ email, password })
       });
       if (result.status !== 200 && result.status !== 201) {
-        return;
+        const res = await result.json()
+        setError({
+          message: res.message,
+          variant: "danger"
+        })
+        return res;
       }
-      setMessage("User Added");
+      setError({
+        message: "User Added",
+        variant: "success"
+      })
       return await result.json();
     } catch (error) {
       console.log(error);
@@ -63,7 +75,13 @@ function App() {
       }).then(result => {
         console.log(result)
         if (result.status !== 200 && result.status !== 201) {
-          return result.json()
+          result.json().then(res => {
+            setError({
+              message: res.message,
+              variant: "danger"
+            })
+            return res;
+          })
         }
         return result.json()
       }).then(data => {
@@ -88,7 +106,7 @@ function App() {
   let routes = (
     <Switch>
       <Route path="/" exact render={props => (
-        <Auth onLogin={loginHandler} onSignup={signupHandler} message={message} showAlert={message ? true : false} />
+        <Auth onLogin={loginHandler} onSignup={signupHandler} error={error} showAlert={error.message ? true : false} />
       )} />
     </Switch>
   )

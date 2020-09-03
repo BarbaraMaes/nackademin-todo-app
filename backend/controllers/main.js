@@ -1,7 +1,7 @@
 const actions = require('../models/CRUD-Todo');
 
 //check role, ADMIN can see all posts, USER can only see their own
-exports.getItems = async (req, res) => {
+exports.getItems = async (req, res, next) => {
     try {
         let allItems;
         if (req.role === "ADMIN") {
@@ -11,63 +11,99 @@ exports.getItems = async (req, res) => {
             allItems = await actions.getItems(req.userId)
         }
         if (!allItems) {
-            res.send("No to do items");
+            res.json({ message: "You have nothing to do" });
         }
         res.send(allItems);
     } catch (error) {
         console.log(error);
+        next(error);
     }
 }
 
-exports.getItem = async (req, res) => {
+exports.getItem = async (req, res, next) => {
     //get specific item from params id
     try {
         const item = await actions.getItem(req.params.id);
-        if (item !== null) {
-            res.json(item);
+        if (!item) {
+            const error = new Error("Could not find item.");
+            error.statusCode = 404;
+            throw error;
         }
-        else res.json("Could not find item");
+        res.status(200).json({ message: "Items fetched", item: item });
     } catch (error) {
-        console.log(error);
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error)
     }
 }
 
-exports.postItem = async (req, res) => {
+/*exports.postItem = async (req, res, next) => {
     //post a new todo item with the logged in userID
     try {
         const item = await actions.postItem(req.body.title, req.body.description, req.userId);
-        res.json(item);
+        res.status(201).json({ message: "Created successfully", item: item });
     } catch (error) {
-        console.log(error);
+        if (!error.statusCode) {
+            error.statusCode = 500
+        }
+        next(error);
+    }
+}*/
+
+exports.postItem = async (req, res, next) => {
+    //post a new todo item with the logged in userID
+    const listId = req.params.id;
+    try {
+        const doc = await actions.postItem(listId, req.body.title, req.body.description);
+        const item = await actions.getList(listId);
+        res.status(201).json({ message: "Created successfully", item: item });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500
+        }
+        next(error);
     }
 }
 
-exports.updateItem = async (req, res) => {
+exports.postList = async (req, res, next) => {
+    try {
+        const list = await actions.postList(req.body.title, req.userId);
+        res.status(201).json({ message: "Created successfully", list: list });
+    } catch (error) {
+        if (!error.statusCode) {
+            error.statusCode = 500
+        }
+        next(error);
+    }
+}
+
+exports.updateItem = async (req, res, next) => {
     //update a new todo item
     try {
         const updated = await actions.updateItem(req.body._id, req.body.title, req.body.description, req.body.done);
-        if (updated === 1) {
-            res.json("Updated succesfuly");
+        if (updated !== 1) {
+            const error = new Error("Something went wrong");
+            error.statusCode = 500;
+            throw error;
         }
-        else res.json("something went wrong");
+        res.status(200).json({ message: "Updated" });
     } catch (error) {
-        console.log(error);
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
     }
 }
 
 exports.deleteItem = async (req, res) => {
-    //delete a todo item, Only ADMIN can delete items
     if (res.status(403)) {
-        return res.json({ message: "This action is not allowed" });
+        return res.status(403).json({ message: "This action is not allowed" });
     }
-    try {
-        const deleted = await actions.deleteItem(req.params.id)
-        if (deleted === 1) {
-            res.status(200).json({ message: "Deleted succesfuly" });
-        }
-        else res.json("something went wrong");
-    } catch (error) {
-        console.log(error);
+    const deleted = await actions.deleteItem(req.params.id);
+    if (deleted !== 1) {
+        res.status(500).json({ message: "Something went wrong" });
     }
+    res.status(200).json({ message: "Deleted succesfuly" });
 
 }
