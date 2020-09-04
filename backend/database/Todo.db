@@ -1,2 +1,9 @@
-{"title":"testy test","userId":"7eexW4caUAXsY6oI","items":[],"_id":"PSSrPhLAIikmCBLZ"}
-{"title":"adding another list","userId":"7eexW4caUAXsY6oI","items":[{"title":"checking iD ","description":"fjdköag","done":false,"_id":"RTQuiJfFzXB91fKTcheckingiD"}],"_id":"RTQuiJfFzXB91fKT"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"First item on the list !!!","description":"bla bla bla","done":false,"_id":"a604184b-8d5f-4109-bc1f-20ab43589523"}],"_id":"AuEAaU34maVEjNaR"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"First item on the list !!!","description":"bla bla bla","done":false,"_id":"a604184b-8d5f-4109-bc1f-20ab43589523"},{"title":"test delete","description":" fjdköag","done":false,"_id":"e4d65449-196d-4cd9-aad8-5df74f994eef"}],"_id":"AuEAaU34maVEjNaR"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"First item on the list !!!","description":"bla bla bla","done":false,"_id":"a604184b-8d5f-4109-bc1f-20ab43589523"}],"_id":"AuEAaU34maVEjNaR"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[],"_id":"AuEAaU34maVEjNaR"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"update test","description":"fjdksga","done":false,"_id":"d10bbe96-74e2-4288-80b6-a4cbbda5d0b6"}],"_id":"AuEAaU34maVEjNaR"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[],"_id":"AuEAaU34maVEjNaR"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"update test !!!!","description":"fjdksga","done":false,"_id":"9833c0be-7139-42c4-8bab-3a4fe408f894"}],"_id":"AuEAaU34maVEjNaR"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[],"_id":"AuEAaU34maVEjNaR"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"update test !!!!","description":"fjdksga","done":true,"_id":"3ac0d966-f072-42d8-a1c5-efd07a010669"}],"_id":"AuEAaU34maVEjNaR"}

@@ -17,17 +17,18 @@ router.post("/", auth.isAuth, controller.postList);
 //post item to a list
 router.post("/:id", auth.isAuth, controller.postItem);
 
-//update a todo item with given id
-router.put("/item/:id", auth.isAuth, controller.updateItem);
-
 //delete a todo item with given id 
 //only admin can delete items
-router.delete("/item/:id", auth.isAuth, auth.checkRole("ADMIN"), controller.deleteItem);
+// auth.checkRole("ADMIN"),
+router.delete("/item/:id", auth.isAuth, controller.deleteItem);
+
+//update a todo item with given id
+router.put("/item", auth.isAuth, controller.updateItem);
 
 //update a todo item with given id
 //router.put("/list/:id", auth.isAuth, controller.updateList);
 
-//delete a todo item with given id 
+//delete a list with given id 
 //only admin can delete items
 //router.delete("/list/:id", auth.isAuth, auth.checkRole("ADMIN"), controller.deleteList);
 

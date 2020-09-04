@@ -12,14 +12,10 @@ const List = props => {
     const [feedItem, setFeedItem] = useState(null);
 
     useEffect(() => {
-        /*props.item.items.map(item => {
-            console.log(item);
-        })*/
         setToken(localStorage.getItem("token"));
-        //setUser(localStorage.getItem("user"));
         setUserId(localStorage.getItem("userId"));
-        //fetchItems();
-    }, [token])
+        props.item.items.map(item => console.log(item))
+    }, [])
 
     const modalHandler = (item) => {
         if (modalShow === true) {
@@ -32,9 +28,10 @@ const List = props => {
     const modalSubmitHandler = async (item) => {
         modalHandler();
         try {
+            console.log(item);
             if (item._id) {
                 //update
-                const result = await fetch("http://localhost:3000/todo/" + item.id, {
+                const result = await fetch("http://localhost:3000/todo/item", {
                     method: "PUT",
                     headers: {
                         "Content-Type": 'application/json',
@@ -55,7 +52,6 @@ const List = props => {
             }
             //create
             else {
-                console.log(props.item.id);
                 const result = await fetch("http://localhost:3000/todo/" + props.item._id, {
                     method: "POST",
                     headers: {
@@ -64,6 +60,7 @@ const List = props => {
                     },
                     body: JSON.stringify(item)
                 });
+                //console.log(json)
                 if (result.status !== 200 && result.status !== 201) {
                     const res = await result.json()
                     /*setError({
@@ -76,6 +73,7 @@ const List = props => {
                 return await result.json();
             }
         } catch (error) {
+            console.log(error);
             //catchError(error);
         }
     }
@@ -84,7 +82,7 @@ const List = props => {
         try {
             //update
             let doneToggle = item.done ? false : true;
-            const result = await fetch("http://localhost:3000/todo/" + item.id, {
+            const result = await fetch("http://localhost:3000/todo/item", {
                 method: "PUT",
                 headers: {
                     "Content-Type": 'application/json',
@@ -107,15 +105,40 @@ const List = props => {
         }
     }
 
+    const deleteHandler = async (id) => {
+        try {
+            const result = await fetch("http://localhost:3000/todo/item/" + id, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": 'application/json',
+                    "Authorization": 'Bearer ' + token
+                }
+            });
+            if (result.status !== 200 && result.status !== 201) {
+                const res = await result.json()
+                console.log(res.message);
+                /*setError({
+                    message: res.message,
+                    variant: "danger"
+                })*/
+                return res;
+            }
+            props.fetchItems();
+            return result.json();
+        } catch (error) {
+            //catchError(error);
+        }
+    }
+
+
 
     return (
         <Container>
             <Card className="text-center m-3">
                 <Card.Header>{props.item.title}</Card.Header>
-                {/* onDelete={props.deleteHandler.bind(this, item._id)}*/}
                 <Card.Body>
                     {props.item.items.length !== 0 ? props.item.items.map(item => (
-                        <Item item={item} onModal={modalHandler} key={props.item.title} checkedHandler={checkedHandler} />
+                        <Item item={item} onModal={() => modalHandler(item)} key={item._id} checkedHandler={() => checkedHandler(item)} onDelete={() => deleteHandler(item._id)} />
                     )) : null}
                 </Card.Body>
                 <Card.Footer>

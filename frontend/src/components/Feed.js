@@ -14,7 +14,7 @@ const Feed = (props) => {
     const [data, setData] = useState(null);
     const [user, setUser] = useState(null);
     const [userId, setUserId] = useState(null);
-    const [token, setToken] = useState(null);
+    const [token, setToken] = useState();
     const [loading, setLoading] = useState(true);
     const [listTitle, setListTitle] = useState(null);
     const [error, setError] = useState({
@@ -39,38 +39,11 @@ const Feed = (props) => {
                     }
                 })
                 const JSONdata = await response.json()
-                JSONdata.items.map(item => console.log(item))
-                //console.log(JSONdata.items);
                 setData(JSONdata)
             } catch (error) {
                 catchError(error);
             }
             setLoading(false)
-        }
-    }
-
-    const deleteHandler = async (id) => {
-        try {
-            const result = await fetch("http://localhost:3000/todo/" + id, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": 'application/json',
-                    "Authorization": 'Bearer ' + token
-                }
-            });
-            if (result.status !== 200 && result.status !== 201) {
-                console.log(result);
-                const res = await result.json()
-                setError({
-                    message: res.message,
-                    variant: "danger"
-                })
-                return res;
-            }
-            fetchItems();
-            return result.json();
-        } catch (error) {
-            catchError(error);
         }
     }
 
@@ -134,7 +107,7 @@ const Feed = (props) => {
                 </InputGroup></Col></Row>
                 {
                     data.items.length !== 0 ? data.items.map((item) => (
-                        <Row className="justify-content-center" key={item._id}><Col xs={8}><List item={item} onDelete={deleteHandler.bind(this, item._id)} fetchItems={fetchItems} /></Col></Row>
+                        <Row className="justify-content-center" key={item._id}><Col xs={8}><List item={item} fetchItems={fetchItems} /></Col></Row>
                     )) : null
                 }
 

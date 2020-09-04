@@ -6,7 +6,6 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 
 const item = props => {
-    console.log(props.item);
     return (
         <Accordion defaultActiveKey="1" className="justify-content-md-center">
             <Card className="text-center" bg={props.item.done ? 'secondary' : null} border="info">

@@ -58,6 +58,7 @@ exports.postItem = async (req, res, next) => {
         const doc = await actions.postItem(listId, req.body.title, req.body.description);
         res.status(201).json({ message: "Created successfully", item: doc });
     } catch (error) {
+        console.log(error);
         if (!error.statusCode) {
             error.statusCode = 500
         }
@@ -80,7 +81,7 @@ exports.postList = async (req, res, next) => {
 }
 
 exports.updateItem = async (req, res, next) => {
-    //update a new todo item
+    //update a todoitem
     try {
         const updated = await actions.updateItem(req.body._id, req.body.title, req.body.description, req.body.done);
         if (updated !== 1) {
@@ -98,9 +99,9 @@ exports.updateItem = async (req, res, next) => {
 }
 
 exports.deleteItem = async (req, res) => {
-    if (res.status(403)) {
+    /*if (res.status(403)) {
         return res.status(403).json({ message: "This action is not allowed" });
-    }
+    }*/
     const deleted = await actions.deleteItem(req.params.id);
     if (deleted !== 1) {
         res.status(500).json({ message: "Something went wrong" });
