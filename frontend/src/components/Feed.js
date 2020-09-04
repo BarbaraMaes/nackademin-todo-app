@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
-import Item from './FeedItem/FeedItem';
+import List from './FeedItem/List';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Modal from './UI/Modal';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
 
 
 const Feed = (props) => {
     const [data, setData] = useState(null);
-    const [modalShow, setModalShow] = useState(false);
-    const [feedItem, setFeedItem] = useState(false);
     const [user, setUser] = useState(null);
+    const [userId, setUserId] = useState(null);
     const [token, setToken] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [listTitle, setListTitle] = useState(null);
     const [error, setError] = useState({
         message: null,
         variant: null
@@ -24,6 +25,7 @@ const Feed = (props) => {
     useEffect(() => {
         setToken(localStorage.getItem("token"));
         setUser(localStorage.getItem("user"));
+        setUserId(localStorage.getItem("userId"));
         fetchItems();
     }, [token])
 
@@ -37,20 +39,14 @@ const Feed = (props) => {
                     }
                 })
                 const JSONdata = await response.json()
+                JSONdata.items.map(item => console.log(item))
+                //console.log(JSONdata.items);
                 setData(JSONdata)
             } catch (error) {
                 catchError(error);
             }
             setLoading(false)
         }
-    }
-
-    const modalHandler = (item) => {
-        if (modalShow === true) {
-            setModalShow(false)
-        }
-        else setModalShow(true)
-        if (item) setFeedItem(item);
     }
 
     const deleteHandler = async (id) => {
@@ -65,7 +61,6 @@ const Feed = (props) => {
             if (result.status !== 200 && result.status !== 201) {
                 console.log(result);
                 const res = await result.json()
-                //console.log(res);
                 setError({
                     message: res.message,
                     variant: "danger"
@@ -79,83 +74,6 @@ const Feed = (props) => {
         }
     }
 
-    const modalSubmitHandler = async (item) => {
-        modalHandler();
-        try {
-            if (item._id) {
-                //update
-                const result = await fetch("http://localhost:3000/todo/" + item.id, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": 'application/json',
-                        "Authorization": 'Bearer ' + token
-                    },
-                    body: JSON.stringify(item)
-                })
-                if (result.status !== 200 && result.status !== 201) {
-                    const res = await result.json()
-                    setError({
-                        message: res.message,
-                        variant: "danger"
-                    })
-                    return res;
-                }
-                fetchItems();
-                return await result.json();
-            }
-            //create
-            else {
-                const result = await fetch("http://localhost:3000/todo", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": 'application/json',
-                        "Authorization": 'Bearer ' + token
-                    },
-                    body: JSON.stringify(item)
-                });
-                if (result.status !== 200 && result.status !== 201) {
-                    const res = await result.json()
-                    setError({
-                        message: res.message,
-                        variant: "danger"
-                    })
-                    return res;
-                }
-                fetchItems();
-                return await result.json();
-            }
-        } catch (error) {
-            catchError(error);
-        }
-    }
-
-    const checkedHandler = async (item) => {
-        try {
-            //update
-            let doneToggle = item.done ? false : true;
-            const result = await fetch("http://localhost:3000/todo/" + item.id, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": 'application/json',
-                    "Authorization": 'Bearer ' + token
-                },
-                body: JSON.stringify({ ...item, done: doneToggle })
-            })
-            if (result.status !== 200 && result.status !== 201) {
-                const res = await result.json()
-                setError({
-                    message: res.message,
-                    variant: "danger"
-                })
-                return res;
-            }
-            fetchItems();
-            return await result.json();
-        } catch (error) {
-            catchError(error);
-        }
-    }
-
     const errorHandler = () => {
         setError(null);
     };
@@ -163,6 +81,32 @@ const Feed = (props) => {
     const catchError = error => {
         setError(error);
     };
+
+    const listTitleHandler = (e) => {
+        setListTitle(e.target.value);
+    }
+
+    const addListHandler = async () => {
+        const result = await fetch("http://localhost:3000/todo", {
+            method: "POST",
+            headers: {
+                "Content-Type": 'application/json',
+                "Authorization": 'Bearer ' + token
+            },
+            body: JSON.stringify({ title: listTitle, userId: userId })
+        });
+        if (result.status !== 200 && result.status !== 201) {
+            const res = await result.json()
+            setError({
+                message: res.message,
+                variant: "danger"
+            })
+            return res;
+        }
+        fetchItems();
+        return await result.json();
+    }
+
     if (loading) {
         return (
             <Container className="text-center m-5">
@@ -178,14 +122,23 @@ const Feed = (props) => {
                     <Alert variant={error.variant} show={error.message ? true : false}>
                         {error.message}
                     </Alert></Row>
+                <Row className="justify-content-center mt-3"><Col xs={8}>  <InputGroup className="mb-3">
+                    <FormControl
+                        onChange={listTitleHandler}
+                        placeholder="List Title"
+                        aria-label="list Title"
+                    />
+                    <InputGroup.Append>
+                        <Button onClick={addListHandler} variant="outline-secondary">Add List</Button>
+                    </InputGroup.Append>
+                </InputGroup></Col></Row>
                 {
-                    data != null ? data.map((item) => (
-                        <Row className="justify-content-center" key={item._id}><Col xs={8}><Item item={item} checkedHandler={checkedHandler} onDelete={deleteHandler.bind(this, item._id)} onModal={modalHandler} /></Col></Row>
+                    data.items.length !== 0 ? data.items.map((item) => (
+                        <Row className="justify-content-center" key={item._id}><Col xs={8}><List item={item} onDelete={deleteHandler.bind(this, item._id)} fetchItems={fetchItems} /></Col></Row>
                     )) : null
                 }
-                <Row className="justify-content-center mt-3"><Col xs={8}><Button variant="info" size="lg" block onClick={modalHandler}>Add Item</Button></Col></Row>
+
                 <Row className="justify-content-center mt-3"><Col xs={8}><Button variant="danger" size="lg" block onClick={props.onLogout}>Logout</Button></Col></Row>
-                <Modal show={modalShow} modalHandler={modalHandler} modalTitle="Add Todo Item" onSubmit={modalSubmitHandler} item={feedItem} />
             </Container>
         )
     }

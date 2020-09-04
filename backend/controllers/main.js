@@ -11,9 +11,9 @@ exports.getItems = async (req, res, next) => {
             allItems = await actions.getItems(req.userId)
         }
         if (!allItems) {
-            res.json({ message: "You have nothing to do" });
+            return res.json({ message: "You have nothing to do" });
         }
-        res.send(allItems);
+        res.status(200).json({ items: allItems });
     } catch (error) {
         console.log(error);
         next(error);
@@ -56,8 +56,7 @@ exports.postItem = async (req, res, next) => {
     const listId = req.params.id;
     try {
         const doc = await actions.postItem(listId, req.body.title, req.body.description);
-        const item = await actions.getList(listId);
-        res.status(201).json({ message: "Created successfully", item: item });
+        res.status(201).json({ message: "Created successfully", item: doc });
     } catch (error) {
         if (!error.statusCode) {
             error.statusCode = 500
@@ -68,7 +67,9 @@ exports.postItem = async (req, res, next) => {
 
 exports.postList = async (req, res, next) => {
     try {
+        console.log(req.body);
         const list = await actions.postList(req.body.title, req.userId);
+        console.log(list);
         res.status(201).json({ message: "Created successfully", list: list });
     } catch (error) {
         if (!error.statusCode) {

@@ -27,7 +27,7 @@ describe("todolist", () => {
         const description = "todoDescription";
         //post a todo item to an existing list
         await todoModel.postItem(this.test.list._id, title, description);
-        const updatedList = await todoModel.getList(this.test.list._id);
+        const updatedList = await todoModel.getItem(this.test.list._id);
         expect(updatedList).to.deep.include({ _id: this.test.list._id, userId: this.test.user._id, title: this.test.listTitle, items: [{ title: title, description: description, done: false }] });
     })
     it("should get the owner of a todolist", async function () {
@@ -72,7 +72,25 @@ describe("Integration tests for todolist endpoints", () => {
             .send(fields)
             .end((error, result) => {
                 expect(result).to.have.status(201)
-                expect(result.body).to.deep.nested.include({ 'item.items[0]': { title: title, description: description, done: false } })
+                expect(result.body.item).to.equal(1)
+                //expect(result.body).to.deep.nested.include({ 'item.items[0]': { title: title, description: description, done: false } })
+            })
+    })
+    it("should return all todo-lists", async function () {
+        const title = "itemTitle";
+        const description = "itemDescription";
+        const fields = { title, description };
+        const list = await todoModel.postList("listTitle", this.test.user._id);
+        await todoModel.postList("listTitle2", this.test.user._id);
+        const item = await todoModel.postItem(list._id, title, description);
+        chai.request(app)
+            .get("/todo/")
+            .set("Content-Type", "application/json")
+            .set("Authorization", "Bearer " + this.test.token.token)
+            .end((error, result) => {
+                expect(result).to.have.status(200);
+                console.log(result.body);
+                //expect(result.body).to.deep.nested.include({ 'item.items[0]': { title: title, description: description, done: false } })
             })
     })
 })

@@ -8,7 +8,7 @@ exports.clear = async () => {
 exports.getItems = async (userId = null) => {
     let docs;
     if (userId) {
-        docs = await TodoDB.find({ user: userId });
+        docs = await TodoDB.find({ userId: userId });
     }
     else {
         docs = await TodoDB.find();
@@ -31,7 +31,7 @@ exports.getOwner = async (id) => {
 }*/
 
 exports.postItem = async (listId, title, description) => {
-    const doc = await TodoDB.update({ _id: listId }, { $push: { items: { title: title, description: description, done: false } } });
+    const doc = await TodoDB.update({ _id: listId }, { $push: { items: { title: title, description: description, done: false, _id: listId + title.replace(/ /g, '') } } });
     return doc;
 }
 
@@ -40,10 +40,11 @@ exports.postList = async (title, userId) => {
     return list;
 }
 
-exports.getList = async (id) => {
+/*exports.getList = async (id) => {
     const list = await TodoDB.findOne({ _id: id });
+    console.log(list);
     return list;
-}
+}*/
 
 exports.updateItem = async (id, title, description, done) => {
     const updated = await TodoDB.update({ _id: id }, { $set: { title: title, description: description, done: done } });

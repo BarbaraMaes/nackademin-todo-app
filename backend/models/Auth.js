@@ -28,6 +28,7 @@ exports.login = async (email, password) => {
     try {
         const user = await AuthDB.findOne({ email: email });
         if (!user) {
+            //send statuscodes nd shit
             console.log("can't find user")
             return
         }
