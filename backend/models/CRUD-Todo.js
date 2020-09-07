@@ -61,15 +61,23 @@ exports.updateItem = async (id, title, description, done) => {
 
 exports.deleteItem = async (id) => {
     //delete a todo item, Only ADMIN can delete items
-    let deleted;
     try {
         //get list of the item
         const list = await TodoDB.findOne({ "items._id": id });
         //remove old item from the list
-        deleted = await TodoDB.update({ "items._id": id }, { $pull: { items: { _id: id } } });
-
+        const deleted = await TodoDB.update({ "items._id": id }, { $pull: { items: { _id: id } } });
+        return deleted;
     } catch (error) {
         next(error);
     }
-    return deleted;
+
+}
+
+exports.deleteList = async (id) => {
+    try {
+        const deleted = await TodoDB.remove({ _id: id });
+        return deleted
+    } catch (error) {
+        next(error)
+    }
 }

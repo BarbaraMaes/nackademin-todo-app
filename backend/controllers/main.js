@@ -109,3 +109,11 @@ exports.deleteItem = async (req, res) => {
     res.status(200).json({ message: "Deleted succesfuly" });
 
 }
+
+exports.deleteList = async (req, res) => {
+    const deleted = await actions.deleteList(req.params.id);
+    if (deleted !== 1) {
+        res.status(500).json({ message: "Something went wrong" });
+    }
+    res.status(200).json({ message: "Deleted succesfuly" });
+}

@@ -3,7 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Item from './FeedItem';
 import Modal from '../UI/Modal';
-import Container from 'react-bootstrap/Container'
+import Container from 'react-bootstrap/Container';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 const List = props => {
     const [modalShow, setModalShow] = useState(false);
@@ -130,6 +131,31 @@ const List = props => {
         }
     }
 
+    const deleteListHandler = async (id) => {
+        try {
+            const result = await fetch("http://localhost:3000/todo/list/" + id, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": 'application/json',
+                    "Authorization": 'Bearer ' + token
+                }
+            });
+            if (result.status !== 200 && result.status !== 201) {
+                const res = await result.json()
+                console.log(res.message);
+                /*setError({
+                    message: res.message,
+                    variant: "danger"
+                })*/
+                return res;
+            }
+            props.fetchItems();
+            return result.json();
+        } catch (error) {
+            //catchError(error);
+        }
+    }
+
 
 
     return (
@@ -142,7 +168,10 @@ const List = props => {
                     )) : null}
                 </Card.Body>
                 <Card.Footer>
-                    <Button variant="info" size="lg" block onClick={modalHandler}>Add Item</Button>
+                    <ButtonGroup className="d-flex justify-content-around">
+                        <Button variant="info" className="mx-3" onClick={modalHandler}>Add Item</Button>
+                        <Button variant="danger" className="mx-3" onClick={() => deleteListHandler(props.item._id)}>Delete List</Button>
+                    </ButtonGroup>
                 </Card.Footer>
             </Card>
             <Modal show={modalShow} modalHandler={modalHandler} modalTitle="Add Todo Item" onSubmit={modalSubmitHandler} item={feedItem} />

@@ -90,7 +90,7 @@ const Feed = (props) => {
     else {
         return (
             <Container className="justify-content-center">
-                <h1 className="text-center mt-4">Hi {user}, these are your Todo Items</h1>
+                <Row className="justify-content-around align-content-center"><Button variant="danger" className="my-3" size="sm" onClick={props.onLogout}>Logout</Button><h1 className="text-center mt-4">Hi {user}, these are your Todo Items</h1></Row>
                 <Row className="justify-content-center">
                     <Alert variant={error.variant} show={error.message ? true : false}>
                         {error.message}
@@ -111,7 +111,7 @@ const Feed = (props) => {
                     )) : null
                 }
 
-                <Row className="justify-content-center mt-3"><Col xs={8}><Button variant="danger" size="lg" block onClick={props.onLogout}>Logout</Button></Col></Row>
+                <Row className="justify-content-center mt-3"><Col xs={8}></Col></Row>
             </Container>
         )
     }

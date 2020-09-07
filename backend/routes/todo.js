@@ -30,6 +30,7 @@ router.put("/item", auth.isAuth, controller.updateItem);
 
 //delete a list with given id 
 //only admin can delete items
-//router.delete("/list/:id", auth.isAuth, auth.checkRole("ADMIN"), controller.deleteList);
+//auth.checkRole("ADMIN"),
+router.delete("/list/:id", auth.isAuth, controller.deleteList);
 
 module.exports = router;
