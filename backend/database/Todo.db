@@ -1,7 +1,8 @@
-{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"update test !!!!","description":"fjdksga","done":true,"_id":"3ac0d966-f072-42d8-a1c5-efd07a010669"}],"_id":"AuEAaU34maVEjNaR"}
-{"$$deleted":true,"_id":"AuEAaU34maVEjNaR"}
-{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[],"_id":"fmlDGCidW6LqOzEB"}
-{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"First item","description":"","done":false,"_id":"8d4ced8f-d129-462a-ae3c-d7f14ebaf8d9"}],"_id":"fmlDGCidW6LqOzEB"}
-{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[],"_id":"fmlDGCidW6LqOzEB"}
-{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"First item","description":"","done":true,"_id":"8d7a58b8-e45a-42d2-9979-01a38f2e52a0"}],"_id":"fmlDGCidW6LqOzEB"}
 {"title":"another list ","userId":"7eexW4caUAXsY6oI","items":[],"_id":"8MiNqjOmnXeDx43O"}
+{"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"First item","description":"","done":true,"_id":"8d7a58b8-e45a-42d2-9979-01a38f2e52a0"}],"_id":"fmlDGCidW6LqOzEB"}
+{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[],"_id":"kOGJTsdlo7a2c0VC"}
+{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[{"title":"Walk doggo ","description":"A long and nice walk","done":false,"_id":"364ea832-c5ac-4775-9fae-5385148e9c1b"}],"_id":"kOGJTsdlo7a2c0VC"}
+{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[{"title":"Walk doggo ","description":"A long and nice walk","done":false,"_id":"364ea832-c5ac-4775-9fae-5385148e9c1b"},{"title":"Borresta ","description":"fjdlkaöga","done":false,"_id":"5319499e-a226-4739-b06c-8cbfdf420936"}],"_id":"kOGJTsdlo7a2c0VC"}
+{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[{"title":"Borresta ","description":"fjdlkaöga","done":false,"_id":"5319499e-a226-4739-b06c-8cbfdf420936"}],"_id":"kOGJTsdlo7a2c0VC"}
+{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[],"_id":"kOGJTsdlo7a2c0VC"}
+{"$$deleted":true,"_id":"kOGJTsdlo7a2c0VC"}

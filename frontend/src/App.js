@@ -8,6 +8,7 @@ function App() {
   const [token, setToken] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   //const [message, setMessage] = useState('');
   const [error, setError] = useState({
     message: null,
@@ -66,37 +67,75 @@ function App() {
     }
   }
 
-  const loginHandler = (email, password) => {
+  const toggleModal = () => {
+    setShowModal(showModal => !showModal);
+  }
+
+  const policyModal = (accept, email, password) => {
+    if (!accept) {
+      toggleModal();
+      return setError({ message: "User cannot be created without accepting the privacy policy", variant: "danger" });
+    }
+    if (accept === true) {
+      toggleModal()
+      signupHandler(email, password);
+    }
+  }
+
+  const deleteUser = async (email, password) => {
     try {
-      fetch("http://localhost:3000/user/login", {
+      const result = await fetch("http://localhost:3000/user/clear", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
-      }).then(result => {
-        console.log(result)
-        if (result.status !== 200 && result.status !== 201) {
-          result.json().then(res => {
-            setError({
-              message: res.message,
-              variant: "danger"
-            })
-            return res;
-          })
-        }
-        return result.json()
-      }).then(data => {
-        setToken(data.token);
-        setUserId(data.userId);
-        setIsAuth(true);
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.userId);
-        localStorage.setItem("user", data.user.email)
-        const remainingMilliseconds = 60 * 60 * 1000;
-        const expiryDate = new Date(
-          new Date().getTime() + remainingMilliseconds
-        );
-        localStorage.setItem("expiryDate", expiryDate.toISOString());
+      });
+      if (result.status !== 200 && result.status !== 201) {
+        const res = await result.json()
+        setError({
+          message: res.message,
+          variant: "danger"
+        })
+        return res;
+      }
+      setError({
+        message: "All of your data has been removed",
+        variant: "success"
       })
+      return await result.json();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  const loginHandler = async (email, password) => {
+    try {
+      const result = await fetch("http://localhost:3000/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+      if (result.status !== 200 && result.status !== 201) {
+        const res = await result.json();
+        console.log(res);
+        setError({
+          message: res.message,
+          variant: "danger"
+        })
+        return res;
+      }
+      const data = await result.json();
+      setToken(data.token);
+      setUserId(data.userId);
+      setIsAuth(true);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("user", data.user.email)
+      const remainingMilliseconds = 60 * 60 * 1000;
+      const expiryDate = new Date(
+        new Date().getTime() + remainingMilliseconds
+      );
+      localStorage.setItem("expiryDate", expiryDate.toISOString());
 
     } catch (error) {
       console.log(error);
@@ -106,7 +145,7 @@ function App() {
   let routes = (
     <Switch>
       <Route path="/" exact render={props => (
-        <Auth onLogin={loginHandler} onSignup={signupHandler} error={error} showAlert={error.message ? true : false} />
+        <Auth deleteUser={deleteUser} policy={policyModal} showModal={showModal} onLogin={loginHandler} toggleModal={toggleModal}/*onSignup={policyModal}*/ error={error} showAlert={error.message ? true : false} />
       )} />
     </Switch>
   )

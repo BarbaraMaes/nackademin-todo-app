@@ -1,6 +1,7 @@
 const { AuthDB } = require("../database/db.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const todoModel = require("./CRUD-Todo");
 require('dotenv').config()
 
 exports.clear = async () => {
@@ -29,8 +30,7 @@ exports.login = async (email, password) => {
         const user = await AuthDB.findOne({ email: email });
         if (!user) {
             //send statuscodes nd shit
-            console.log("can't find user")
-            return
+            return null;
         }
         const passwordCompare = await bcrypt.compare(password, user.hash);
         if (!passwordCompare) {
@@ -45,5 +45,22 @@ exports.login = async (email, password) => {
         return ({ token: token, userId: user._id.toString(), user: user });
     } catch (error) {
         //throw error
+    }
+}
+
+exports.deleteUser = async (email, password) => {
+    try {
+        const user = await AuthDB.findOne({ email: email });
+        const passwordCompare = await bcrypt.compare(password, user.hash);
+        if (!passwordCompare) {
+            console.log("passwords don't match")
+            return
+        }
+        await todoModel.clearUser(user._id);
+        await AuthDB.remove({ _id: user._id });
+        return user;
+    }
+    catch (err) {
+        console.log(err);
     }
 }

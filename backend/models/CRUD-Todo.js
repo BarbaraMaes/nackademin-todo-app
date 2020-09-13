@@ -3,6 +3,11 @@ const { v4: uuidv4 } = require("uuid");
 
 const { TodoDB } = require("../database/db.js");
 
+exports.clearUser = async (userId) => {
+    const clear = await TodoDB.remove({ userId: userId }, { multi: true });
+    return clear;
+}
+
 exports.clear = async () => {
     const clear = await TodoDB.remove({}, { multi: true });
     return clear;

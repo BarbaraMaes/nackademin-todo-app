@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Alert from 'react-bootstrap/Alert';
+import PolicyModal from '../UI/PolicyModal';
 
 const Auth = (props) => {
     const [email, setEmail] = useState(null);
@@ -38,11 +39,15 @@ const Auth = (props) => {
                         </Form.Group>
                         <ButtonGroup className="d-flex justify-content-around">
                             <Button className="mx-2" variant="secondary" onClick={() => { props.onLogin(email, password) }}>Login</Button>
-                            <Button className="mx-2" variant="primary" onClick={() => { props.onSignup(email, password) }}>Signup</Button>
+                            <Button className="mx-2" variant="primary" onClick={props.toggleModal} >Signup</Button>
+                        </ButtonGroup>
+                        <ButtonGroup className="d-flex justify-content-around">
+                            <Button className="m-2" block variant="danger" onClick={() => { props.deleteUser(email, password) }}> Delete user</Button>
                         </ButtonGroup>
                     </Form>
                 </Col>
             </Row>
+            <PolicyModal showModal={props.showModal} policy={props.policy} email={email} password={password} />
         </Container>
     )
 }

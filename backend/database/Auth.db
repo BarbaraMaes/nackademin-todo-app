@@ -1,2 +1,7 @@
 {"email":"user","hash":"$2a$12$2ePtvr2qlmar2OxiwuQL6.MT7ywm.6a/yN1S4JoUzyheB.PFDQdke","role":"USER","_id":"7eexW4caUAXsY6oI"}
 {"email":"admin","hash":"$2a$12$g0b.2/MjI39/7nxMrPP/3.OEj7cXRQN/x9kRz7hzZ2HUpwKPBM.si","role":"ADMIN","_id":"osM1LmRdvEaf8qTF"}
+{"email":"test@test.com","hash":"$2a$12$xCD3fZ2rBU.Q5Tw..SpZ8ucll4hLKwPA1ShiwAtOH.rxVhnmWXEjy","role":"USER","_id":"2sdc6oqkGo28CYt3"}
+{"$$deleted":true,"_id":"2sdc6oqkGo28CYt3"}
+{"email":"test@test.com","hash":"$2a$12$YDvFnaUDI9df8AWqV.J3o.dFGlZGMCWsstii.TaR4Z5PDNjNzJ1Bu","role":"USER","_id":"W155F5FRnvgZvyhK"}
+{"email":"test1@test.com","hash":"$2a$12$JysqikhQ/9g8DViZASZic.UK0sihfHIydTWPwlS0./BI47Np8TmdO","role":"USER","_id":"TSNrbbVtG2To8K3y"}
+{"$$deleted":true,"_id":"TSNrbbVtG2To8K3y"}

@@ -13,7 +13,7 @@ const item = props => {
                 <Accordion.Collapse eventKey="0">
                     {props.item ?
                         <Card.Body>
-                            <Card.Text>{item.description}</Card.Text>
+                            <Card.Text>{props.item.description}</Card.Text>
                             <Form className="my-3">
                                 <Form.Check type="checkbox" label="done" size="lg" checked={item.done} onChange={() => props.checkedHandler(item)}></Form.Check>
                             </Form>
