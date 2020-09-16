@@ -7,7 +7,7 @@ const { expect, request } = require("chai");
 const app = require("../app");
 chai.use(chaiHttp);
 
-descibr("test", () => {
+describe("test", () => {
     it("fake test", function () {
         expect(true).to.equal(false);
     })
