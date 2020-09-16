@@ -9,7 +9,7 @@ chai.use(chaiHttp);
 
 describe("test", () => {
     it("fake test", function () {
-        expect(true).to.equal(false);
+        expect(true).to.equal(true);
     })
 })
 
