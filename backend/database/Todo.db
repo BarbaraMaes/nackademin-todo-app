@@ -1,8 +1,19 @@
 {"title":"another list ","userId":"7eexW4caUAXsY6oI","items":[],"_id":"8MiNqjOmnXeDx43O"}
 {"title":"This is a new list","userId":"7eexW4caUAXsY6oI","items":[{"title":"First item","description":"","done":true,"_id":"8d7a58b8-e45a-42d2-9979-01a38f2e52a0"}],"_id":"fmlDGCidW6LqOzEB"}
-{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[],"_id":"kOGJTsdlo7a2c0VC"}
-{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[{"title":"Walk doggo ","description":"A long and nice walk","done":false,"_id":"364ea832-c5ac-4775-9fae-5385148e9c1b"}],"_id":"kOGJTsdlo7a2c0VC"}
-{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[{"title":"Walk doggo ","description":"A long and nice walk","done":false,"_id":"364ea832-c5ac-4775-9fae-5385148e9c1b"},{"title":"Borresta ","description":"fjdlkaöga","done":false,"_id":"5319499e-a226-4739-b06c-8cbfdf420936"}],"_id":"kOGJTsdlo7a2c0VC"}
-{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[{"title":"Borresta ","description":"fjdlkaöga","done":false,"_id":"5319499e-a226-4739-b06c-8cbfdf420936"}],"_id":"kOGJTsdlo7a2c0VC"}
-{"title":"testing","userId":"2sdc6oqkGo28CYt3","items":[],"_id":"kOGJTsdlo7a2c0VC"}
-{"$$deleted":true,"_id":"kOGJTsdlo7a2c0VC"}
+{"$$deleted":true,"_id":"8MiNqjOmnXeDx43O"}
+{"$$deleted":true,"_id":"fmlDGCidW6LqOzEB"}
+{"title":"listTitle","userId":"IM5qJx7eCLEGkpaq","items":[],"_id":"0x6eOpbwp9gAzuD4"}
+{"$$deleted":true,"_id":"0x6eOpbwp9gAzuD4"}
+{"title":"listTitle","userId":"jZOvTdgGpc6Hy84g","items":[],"_id":"1AgTarQeHcmF5jqY"}
+{"title":"listTitle","userId":"jZOvTdgGpc6Hy84g","items":[{"title":"todoTitle","description":"todoDescription","done":false,"_id":"7ef36af5-8539-422a-81a8-abcfc717d502"}],"_id":"1AgTarQeHcmF5jqY"}
+{"$$deleted":true,"_id":"1AgTarQeHcmF5jqY"}
+{"title":"listTitle","userId":"jN2bZQUxyOOE11fn","items":[],"_id":"VVoK8FZDiHoMHVhT"}
+{"$$deleted":true,"_id":"VVoK8FZDiHoMHVhT"}
+{"title":"listTitle","userId":"v3aRmsjJJIeWaKY0","items":[],"_id":"tJZ0nJqqCZWxV0GN"}
+{"$$deleted":true,"_id":"tJZ0nJqqCZWxV0GN"}
+{"title":"listTitle","userId":"3QhWgILYmol5RKai","items":[],"_id":"Juf16a45LQZWik7K"}
+{"title":"listTitle","userId":"3QhWgILYmol5RKai","items":[{"title":"itemTitle","description":"itemDescription","done":false,"_id":"4abacc82-a20a-4f73-bbdd-a11313005d7e"}],"_id":"Juf16a45LQZWik7K"}
+{"$$deleted":true,"_id":"Juf16a45LQZWik7K"}
+{"title":"listTitle","userId":"iSczL92DYCv9OnD1","items":[],"_id":"MKk2j1n78W4Asy5N"}
+{"title":"listTitle2","userId":"iSczL92DYCv9OnD1","items":[],"_id":"DwlASQT1b5ZYqXmB"}
+{"title":"listTitle","userId":"iSczL92DYCv9OnD1","items":[{"title":"itemTitle","description":"itemDescription","done":false,"_id":"62c569c2-9a15-40e4-9d25-3aca772e156d"}],"_id":"MKk2j1n78W4Asy5N"}
