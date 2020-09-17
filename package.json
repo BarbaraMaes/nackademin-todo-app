@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "cross-env ENV=test mocha --exit",
-    "start": "nodemon start.js"
+    "start": "nodemon start.js && cd frontent && npm start"
   },
   "repository": {
     "type": "git",
