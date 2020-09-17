@@ -4,7 +4,7 @@ require('dotenv').config()
 
 Database.connect().then(console.log("connected to db")).catch(err => console.log(err));
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 8080, () => {
     console.log(`server started on port ${process.env.PORT}`);
 })
 

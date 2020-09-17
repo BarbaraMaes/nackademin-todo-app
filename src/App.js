@@ -3,7 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import Feed from './components/Feed';
 import Auth from './components/Auth/Auth';
 import './App.css';
-const URI = require("./constants/URI");
+const { URI } = require("./constants/URI");
 
 function App() {
   const [token, setToken] = useState(null);
@@ -62,6 +62,7 @@ function App() {
         message: "User Added",
         variant: "success"
       })
+      console.log(result);
       return await result.json();
     } catch (error) {
       console.log(error);
