@@ -1,8 +1,10 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 
+const Database = require("../database/database");
 const authModel = require("../models/Auth");
 const todoModel = require("../models/CRUD-Todo");
+const mongoose = require("mongoose");
 const { expect, request } = require("chai");
 const app = require("../app");
 chai.use(chaiHttp);
@@ -14,6 +16,12 @@ describe("test", () => {
 })
 
 describe("todolist", () => {
+    before(async () => {
+        await Database.connect();
+    })
+    after(async () => {
+        await Database.disconnect();
+    })
     beforeEach(async function () {
         //clear user database
         await authModel.clear();
@@ -38,12 +46,14 @@ describe("todolist", () => {
         expect(updatedList).to.deep.include({ userId: this.test.user._id, title: this.test.listTitle });
     })
     it("should get the owner of a todolist", async function () {
-        const ownerId = await todoModel.getOwner(this.test.list._id);
-        expect(ownerId.userId).to.equal(this.test.user._id);
+        expect(this.test.list.userId).to.equal(this.test.user._id);
     })
 })
 
 describe("Integration tests for todolist endpoints", () => {
+    before(async () => {
+        await Database.connect();
+    })
     beforeEach(async function () {
         //create and login user
         await authModel.clear();
@@ -53,9 +63,12 @@ describe("Integration tests for todolist endpoints", () => {
         this.currentTest.token = await authModel.login("babs@test.com", "123");
 
     })
+    after(async () => {
+        await Database.disconnect();
+    })
     it("should create a todolist", async function () {
         const title = "listTitle";
-        const userId = this.test.user._id
+        const userId = mongoose.mongo.ObjectId(this.test.user._id).toString();
         const fields = { title, userId };
         chai.request(app)
             .post("/todo/")
@@ -79,7 +92,7 @@ describe("Integration tests for todolist endpoints", () => {
             .send(fields)
             .end((error, result) => {
                 expect(result).to.have.status(201)
-                expect(result.body.item).to.equal(1)
+                expect(result.body.item.nModified).to.equal(1)
                 //expect(result.body).to.deep.nested.include({ 'item.items[0]': { title: title, description: description, done: false } })
             })
     })
@@ -96,7 +109,6 @@ describe("Integration tests for todolist endpoints", () => {
             .set("Authorization", "Bearer " + this.test.token.token)
             .end((error, result) => {
                 expect(result).to.have.status(200);
-                //console.log(result.body);
                 //expect(result.body).to.deep.nested.include({ 'item.items[0]': { title: title, description: description, done: false } })
             })
     })

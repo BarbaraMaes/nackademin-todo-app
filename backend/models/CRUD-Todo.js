@@ -1,14 +1,26 @@
 //const { uuid } = require("uuidv4");
 const { v4: uuidv4 } = require("uuid");
 
-const { TodoDB } = require("../database/db.js");
+//const { TodoDB } = require("../database/db.js");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const postSchema = new Schema({
+    title: String,
+    userId: { type: Schema.Types.ObjectId, ref: "User" },
+    items: Array
+})
+
+const Post = mongoose.model("POST", postSchema);
+
 
 exports.clearUser = async (userId) => {
-    const clear = await TodoDB.remove({ userId: userId }, { multi: true });
-    return clear;
+    await Post.deleteMany({ userId: userId });
 }
 
+
 exports.clear = async () => {
+    return await Post.deleteMany({});
     const clear = await TodoDB.remove({}, { multi: true });
     return clear;
 }
@@ -16,32 +28,28 @@ exports.clear = async () => {
 exports.getItems = async (userId = null) => {
     let docs;
     if (userId) {
-        docs = await TodoDB.find({ userId: userId });
+        docs = await Post.find({ userId: userId });
     }
     else {
-        docs = await TodoDB.find();
+        docs = await Post.find();
     }
     return docs;
 }
 
 exports.getItem = async (id) => {
-    const doc = await TodoDB.findOne({ _id: id });
+    const doc = await Post.findOne({ _id: id });
     return doc;
 }
 
 exports.getOwner = async (id) => {
-    const doc = await TodoDB.findOne({ _id: id });
+    const doc = await Post.findOne({ _id: id });
     return doc;
 }
-/*exports.postItem = async (title, description, user) => {
-    const doc = await TodoDB.insert({ title: title, description: description, done: false, user: user });
-    return doc;
-}*/
 
 exports.postItem = async (listId, title, description, done = false) => {
     try {
         const id = uuidv4();
-        const doc = await TodoDB.update({ _id: listId }, { $push: { items: { title: title, description: description, done: done, _id: id } } });
+        const doc = await Post.updateOne({ _id: listId }, { $push: { items: { title: title, description: description, done: done, _id: id } } });
         return doc;
     } catch (error) {
         console.log(error)
@@ -49,40 +57,46 @@ exports.postItem = async (listId, title, description, done = false) => {
 }
 
 exports.postList = async (title, userId) => {
-    const list = await TodoDB.insert({ title: title, userId: userId, items: [] });
+    const list = await Post.create({ title: title, userId: userId, items: [] });
     return list;
 }
 
 
 exports.updateItem = async (id, title, description, done) => {
-    //get list of the item
-    const list = await TodoDB.findOne({ "items._id": id });
-    //remove old item from the list
-    await TodoDB.update({ "items._id": id }, { $pull: { items: { _id: id } } });
-    //add new item to the same list
-    const addNew = await this.postItem(list._id, title, description, done);
-    return addNew
+    try {
+        console.log(id);
+        const object = {
+            _id: id,
+            title: title,
+            description: description,
+            done: done
+        }
+        const item = await Post.updateOne({ "items._id": object._id }, { $set: { "items.$": object } });
+        return item
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 exports.deleteItem = async (id) => {
     //delete a todo item, Only ADMIN can delete items
     try {
-        //get list of the item
-        const list = await TodoDB.findOne({ "items._id": id });
-        //remove old item from the list
-        const deleted = await TodoDB.update({ "items._id": id }, { $pull: { items: { _id: id } } });
-        return deleted;
+        const item = await Post.updateOne({ "items._id": id }, { $pull: { "items": { _id: id } } })
+        return item;
     } catch (error) {
-        next(error);
+        console.log(error);
     }
 
 }
 
 exports.deleteList = async (id) => {
     try {
-        const deleted = await TodoDB.remove({ _id: id });
+        const deleted = await Post.deleteOne({ _id: id });
         return deleted
     } catch (error) {
-        next(error)
+        console.log(error);
     }
 }
+
+
+

@@ -28,7 +28,6 @@ exports.isAuth = (req, res, next) => {
 exports.checkRole = (role) => {
     return (req, res, next) => {
         const userRole = req.role;
-        console.log(userRole);
         if (userRole !== role) {
             const error = new Error("This action is not permitted");
             error.statusCode = 401;
