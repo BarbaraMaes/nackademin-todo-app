@@ -41,13 +41,13 @@ function App() {
     localStorage.removeItem("userId");
   }
 
-  const signupHandler = async (email, password) => {
+  const signupHandler = async (email, password, admin) => {
     //event.preventDefault();
     try {
       const result = await fetch("http://localhost:3000/user/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, admin })
       });
       if (result.status !== 200 && result.status !== 201) {
         const res = await result.json()
@@ -71,14 +71,14 @@ function App() {
     setShowModal(showModal => !showModal);
   }
 
-  const policyModal = (accept, email, password) => {
+  const policyModal = (accept, email, password, admin) => {
     if (!accept) {
       toggleModal();
       return setError({ message: "User cannot be created without accepting the privacy policy", variant: "danger" });
     }
     if (accept === true) {
       toggleModal()
-      signupHandler(email, password);
+      signupHandler(email, password, admin);
     }
   }
 

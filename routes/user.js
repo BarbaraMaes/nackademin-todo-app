@@ -9,4 +9,5 @@ router.post("/signup", controller.signup);
 router.post("/login", controller.login);
 
 router.post("/clear", controller.clearUser);
+
 module.exports = router;

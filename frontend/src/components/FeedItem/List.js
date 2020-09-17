@@ -5,12 +5,17 @@ import Item from './FeedItem';
 import Modal from '../UI/TodoModal';
 import Container from 'react-bootstrap/Container';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import Alert from 'react-bootstrap/Alert';
 
 const List = props => {
     const [modalShow, setModalShow] = useState(false);
     const [token, setToken] = useState(null);
     const [userId, setUserId] = useState(null);
     const [feedItem, setFeedItem] = useState(null);
+    const [error, setError] = useState({
+        message: null,
+        variant: null
+    });
 
     useEffect(() => {
         setToken(localStorage.getItem("token"));
@@ -42,10 +47,10 @@ const List = props => {
                 })
                 if (result.status !== 200 && result.status !== 201) {
                     const res = await result.json()
-                    /*setError({
+                    setError({
                         message: res.message,
                         variant: "danger"
-                    })*/
+                    })
                     return res;
                 }
                 props.fetchItems();
@@ -64,10 +69,10 @@ const List = props => {
                 //console.log(json)
                 if (result.status !== 200 && result.status !== 201) {
                     const res = await result.json()
-                    /*setError({
+                    setError({
                         message: res.message,
                         variant: "danger"
-                    })*/
+                    })
                     return res;
                 }
                 props.fetchItems();
@@ -93,10 +98,10 @@ const List = props => {
             })
             if (result.status !== 200 && result.status !== 201) {
                 const res = await result.json()
-                /*setError({
+                setError({
                     message: res.message,
                     variant: "danger"
-                })*/
+                })
                 return res;
             }
             props.fetchItems();
@@ -118,10 +123,10 @@ const List = props => {
             if (result.status !== 200 && result.status !== 201) {
                 const res = await result.json()
                 console.log(res.message);
-                /*setError({
+                setError({
                     message: res.message,
                     variant: "danger"
-                })*/
+                })
                 return res;
             }
             props.fetchItems();
@@ -143,10 +148,10 @@ const List = props => {
             if (result.status !== 200 && result.status !== 201) {
                 const res = await result.json()
                 console.log(res.message);
-                /*setError({
+                setError({
                     message: res.message,
                     variant: "danger"
-                })*/
+                })
                 return res;
             }
             props.fetchItems();
@@ -160,6 +165,9 @@ const List = props => {
 
     return (
         <Container>
+            <Alert variant={error.variant} show={error.message ? true : false}>
+                {error.message}
+            </Alert>
             <Card className="text-center m-3">
                 <Card.Header>{props.item.title}</Card.Header>
                 <Card.Body>
