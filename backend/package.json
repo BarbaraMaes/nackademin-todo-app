@@ -4,7 +4,7 @@
   "description": "backend for todo webbaplication with node and nedb",
   "main": "app.js",
   "scripts": {
-    "test": "cross-env ENV=test mocha",
+    "test": "cross-env ENV=test mocha ",
     "start": "nodemon start.js"
   },
   "repository": {
