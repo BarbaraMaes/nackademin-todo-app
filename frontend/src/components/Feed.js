@@ -10,6 +10,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import PolicyModal from './UI/PolicyModal';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+const URI = require("../constants/URI");
 
 const Feed = (props) => {
     const [data, setData] = useState(null);
@@ -35,7 +36,7 @@ const Feed = (props) => {
     const fetchItems = async () => {
         if (token && user) {
             try {
-                const response = await fetch("http://localhost:3000/todo", {
+                const response = await fetch(URI + "/todo", {
                     headers: {
                         "Content-Type": 'application/json',
                         "Authorization": 'Bearer ' + token
@@ -67,7 +68,7 @@ const Feed = (props) => {
     }
 
     const addListHandler = async () => {
-        const result = await fetch("http://localhost:3000/todo", {
+        const result = await fetch(URI + "/todo", {
             method: "POST",
             headers: {
                 "Content-Type": 'application/json',

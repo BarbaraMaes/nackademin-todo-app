@@ -6,6 +6,7 @@ import Modal from '../UI/TodoModal';
 import Container from 'react-bootstrap/Container';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Alert from 'react-bootstrap/Alert';
+const URI = require("../../constants/URI");
 
 const List = props => {
     const [modalShow, setModalShow] = useState(false);
@@ -37,7 +38,7 @@ const List = props => {
             console.log(item);
             if (item._id) {
                 //update
-                const result = await fetch("http://localhost:3000/todo/item", {
+                const result = await fetch(URI + "/todo/item", {
                     method: "PUT",
                     headers: {
                         "Content-Type": 'application/json',
@@ -58,7 +59,7 @@ const List = props => {
             }
             //create
             else {
-                const result = await fetch("http://localhost:3000/todo/" + props.item._id, {
+                const result = await fetch(URI + "/todo/" + props.item._id, {
                     method: "POST",
                     headers: {
                         "Content-Type": 'application/json',
@@ -88,7 +89,7 @@ const List = props => {
         try {
             //update
             let doneToggle = item.done ? false : true;
-            const result = await fetch("http://localhost:3000/todo/item", {
+            const result = await fetch(URI + "/todo/item", {
                 method: "PUT",
                 headers: {
                     "Content-Type": 'application/json',
@@ -113,7 +114,7 @@ const List = props => {
 
     const deleteHandler = async (id) => {
         try {
-            const result = await fetch("http://localhost:3000/todo/item/" + id, {
+            const result = await fetch(URI + "/todo/item/" + id, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": 'application/json',
@@ -138,7 +139,7 @@ const List = props => {
 
     const deleteListHandler = async (id) => {
         try {
-            const result = await fetch("http://localhost:3000/todo/list/" + id, {
+            const result = await fetch(URI + "/todo/list/" + id, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": 'application/json',

@@ -3,6 +3,7 @@ import { Route, Switch, withRouter } from 'react-router-dom'
 import Feed from './components/Feed';
 import Auth from './components/Auth/Auth';
 import './App.css';
+const URI = require("./constants/URI");
 
 function App() {
   const [token, setToken] = useState(null);
@@ -44,7 +45,7 @@ function App() {
   const signupHandler = async (email, password, admin) => {
     //event.preventDefault();
     try {
-      const result = await fetch("http://localhost:3000/user/signup", {
+      const result = await fetch(URI + "/user/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password, admin })
@@ -84,7 +85,7 @@ function App() {
 
   const deleteUser = async (email, password) => {
     try {
-      const result = await fetch("http://localhost:3000/user/clear", {
+      const result = await fetch(URI + "/user/clear", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -110,7 +111,7 @@ function App() {
 
   const loginHandler = async (email, password) => {
     try {
-      const result = await fetch("http://localhost:3000/user/login", {
+      const result = await fetch(URI + "/user/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
