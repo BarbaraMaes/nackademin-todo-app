@@ -17,10 +17,10 @@ describe("test", () => {
 
 describe("todolist", () => {
     before(async () => {
-        await Database.connect();
+        return Database.connect();
     })
     after(async () => {
-        await Database.disconnect();
+        return Database.disconnect();
     })
     beforeEach(async function () {
         //clear user database
@@ -52,7 +52,7 @@ describe("todolist", () => {
 
 describe("Integration tests for todolist endpoints", () => {
     before(async () => {
-        await Database.connect();
+        return Database.connect();
     })
     beforeEach(async function () {
         //create and login user
@@ -64,7 +64,7 @@ describe("Integration tests for todolist endpoints", () => {
 
     })
     after(async () => {
-        await Database.disconnect();
+        return Database.disconnect();
     })
     it("should create a todolist", async function () {
         const title = "listTitle";
