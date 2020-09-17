@@ -26,9 +26,8 @@ switch (process.env.ENV) {
 }
 
 async function connect() {
-
-    let uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@todo.hxnc3.mongodb.net/Todo?retryWrites=true&w=majority`
-    //await mongoDatabase.getUri();
+    //`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@todo.hxnc3.mongodb.net/Todo?retryWrites=true&w=majority`
+    let uri = await mongoDatabase.getUri();
 
     await mongoose.connect(uri, {
         useNewUrlParser: true,
@@ -39,7 +38,7 @@ async function connect() {
 }
 
 async function disconnect() {
-    if (process.env.ENV == 'test' || process.env.ENV == 'development') {
+    if (process.env.ENV == 'test' || process.env.ENV == 'dev') {
         await mongoDatabase.stop()
     }
     await mongoose.disconnect()
