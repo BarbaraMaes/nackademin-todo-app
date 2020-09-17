@@ -1,7 +1,8 @@
 const actions = require('../models/Auth');
 
 exports.signup = async (req, res) => {
-    const user = await actions.signup(req.body.email, req.body.password);
+    console.log(req.body);
+    const user = await actions.signup(req.body.email, req.body.password, req.body.admin);
     if (!user) {
         res.status(500).json({ message: "user already exists" });
     }
@@ -9,6 +10,7 @@ exports.signup = async (req, res) => {
 }
 
 exports.login = async (req, res) => {
+    console.log(req.body);
     const auth = await actions.login(req.body.email, req.body.password);
     if (!auth) {
         res.status(500).json({ message: "can't find user" });
@@ -18,7 +20,6 @@ exports.login = async (req, res) => {
 
 exports.clearUser = async (req, res) => {
     const clear = await actions.deleteUser(req.body.email, req.body.password);
-    console.log(clear);
     if (!clear) {
         res.status(500).json({ message: "something went wrong" });
     }

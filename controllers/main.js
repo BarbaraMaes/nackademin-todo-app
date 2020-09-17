@@ -68,9 +68,7 @@ exports.postItem = async (req, res, next) => {
 
 exports.postList = async (req, res, next) => {
     try {
-        console.log(req.body);
         const list = await actions.postList(req.body.title, req.userId);
-        console.log(list);
         res.status(201).json({ message: "Created successfully", list: list });
     } catch (error) {
         if (!error.statusCode) {
@@ -83,8 +81,8 @@ exports.postList = async (req, res, next) => {
 exports.updateItem = async (req, res, next) => {
     //update a todoitem
     try {
-        const updated = await actions.updateItem(req.body._id, req.body.title, req.body.description, req.body.done);
-        if (updated !== 1) {
+        const updated = await actions.updateItem(req.body._id, req.body.title, req.body.description, req.body.done || false);
+        if (updated.nModified === 0) {
             const error = new Error("Something went wrong");
             error.statusCode = 500;
             throw error;
@@ -99,20 +97,21 @@ exports.updateItem = async (req, res, next) => {
 }
 
 exports.deleteItem = async (req, res) => {
-    /*if (res.status(403)) {
-        return res.status(403).json({ message: "This action is not allowed" });
-    }*/
     const deleted = await actions.deleteItem(req.params.id);
-    if (deleted !== 1) {
-        res.status(500).json({ message: "Something went wrong" });
+    console.log(deleted);
+    if (deleted.nModified === 0) {
+        return res.status(500).json({ message: "Something went wrong" });
     }
     res.status(200).json({ message: "Deleted succesfuly" });
 
 }
 
 exports.deleteList = async (req, res) => {
+    if (res.status(403)) {
+        return res.status(403).json({ message: "This action is not allowed" });
+    }
     const deleted = await actions.deleteList(req.params.id);
-    if (deleted !== 1) {
+    if (deleted.nModified === 1) {
         res.status(500).json({ message: "Something went wrong" });
     }
     res.status(200).json({ message: "Deleted succesfuly" });

@@ -17,7 +17,7 @@ const PolicyModal = (props) => {
             {props.policy ?
                 <Modal.Footer>
                     <ButtonGroup className="d-flex justify-content-around">
-                        <Button className="mx-2" variant="secondary" onClick={() => { props.policy(true, props.email, props.password) }}>Ok</Button>
+                        <Button className="mx-2" variant="secondary" onClick={() => { props.policy(true, props.email, props.password, props.admin) }}>Ok</Button>
                         <Button className="mx-2" variant="danger" onClick={() => { props.policy(false) }}>Decline</Button>
                     </ButtonGroup>
                 </Modal.Footer>

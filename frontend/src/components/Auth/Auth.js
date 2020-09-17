@@ -11,6 +11,7 @@ import PolicyModal from '../UI/PolicyModal';
 const Auth = (props) => {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const [role, setRole] = useState(false)
 
     const emailChange = e => {
         setEmail(e.target.value);
@@ -18,6 +19,10 @@ const Auth = (props) => {
 
     const passwordChange = e => {
         setPassword(e.target.value)
+    }
+
+    const roleChange = e => {
+        setRole(e.target.checked)
     }
 
     return (
@@ -37,6 +42,9 @@ const Auth = (props) => {
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" name="password" onChange={passwordChange} />
                         </Form.Group>
+                        <Form.Group>
+                            <Form.Check type="checkbox" label="Admin" name="admin" onChange={roleChange} />
+                        </Form.Group>
                         <ButtonGroup className="d-flex justify-content-around">
                             <Button className="mx-2" variant="secondary" onClick={() => { props.onLogin(email, password) }}>Login</Button>
                             <Button className="mx-2" variant="primary" onClick={props.toggleModal} >Signup</Button>
@@ -47,7 +55,7 @@ const Auth = (props) => {
                     </Form>
                 </Col>
             </Row>
-            <PolicyModal showModal={props.showModal} policy={props.policy} email={email} password={password} />
+            <PolicyModal showModal={props.showModal} policy={props.policy} email={email} password={password} admin={role} />
         </Container>
     )
 }
