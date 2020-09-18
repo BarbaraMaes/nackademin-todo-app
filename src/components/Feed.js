@@ -10,7 +10,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import PolicyModal from './UI/PolicyModal';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-const URI = require("../constants/URI");
+const { URI } = require("../constants/URI");
 
 const Feed = (props) => {
     const [data, setData] = useState(null);

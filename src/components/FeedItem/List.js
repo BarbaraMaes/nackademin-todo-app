@@ -6,7 +6,7 @@ import Modal from '../UI/TodoModal';
 import Container from 'react-bootstrap/Container';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Alert from 'react-bootstrap/Alert';
-const URI = require("../../constants/URI");
+const { URI } = require("../../constants/URI");
 
 const List = props => {
     const [modalShow, setModalShow] = useState(false);
