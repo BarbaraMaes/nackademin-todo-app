@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "cross-env ENV=test mocha --exit",
-    "start": "concurrently \"node start.js\" \"react-scripts start\""
+    "start": "node start.js"
   },
   "repository": {
     "type": "git",
