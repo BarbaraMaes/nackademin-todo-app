@@ -7,7 +7,7 @@
     "test": "cross-env ENV=test mocha --exit",
     "start": "node start.js",
     "build": "react-scripts build",
-    "dev": "react-scripts start"
+    "dev": "concurrently \"node start.js\" \"react-scripts start\""
   },
   "repository": {
     "type": "git",
